@@ -9,7 +9,6 @@ on:
       - kube/**
   workflow_dispatch: 
 
-version: 2.1
 jobs:
   build:
     docker:
