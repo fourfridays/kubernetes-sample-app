@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-sample-app
+  namespace: default
+  labels:
+    app: kubernetes-sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubernetes-sample-app
+  template:
+    metadata:
+      labels:
+        app: kubernetes-sample-app
+    spec:
+      containers:
+        - name: kubernetes-sample-app
+          image: fourfridays/kubernetes-sample-app:latest
+          ports:
+            - containerPort: 80
+              name: http
