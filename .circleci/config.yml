@@ -1,4 +1,4 @@
-name: 'CI/CD'
+name: 'oci-ci-cd'
 
 on:
   push:
@@ -8,16 +8,6 @@ on:
       - kube/**
   workflow_dispatch: 
 
-
-jobs:
-  terraform_generate_orm_zip:
-    name: 'Generate Stack Package'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: 'Terraform Init'
-        uses: hashicorp/terraform-github-actions@master
-        with:
 jobs:
   build:
     name: 'Generate Stack Package'
