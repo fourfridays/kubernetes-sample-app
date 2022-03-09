@@ -11,27 +11,6 @@ on:
 
 jobs:
   build:
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    environment:
-      IMAGE_NAME: dockerhub-username/do-kubernetes-sample-app
-    working_directory: ~/app
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Build Docker image
-          command: |
-            docker build -t $IMAGE_NAME:latest .
-      - run:
-          name: Push Docker Image
-          command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            docker push $IMAGE_NAME:latest
-
-
-jobs:
-  build:
     name: 'Generate Stack Package'
     runs-on: ubuntu-latest
     steps:
