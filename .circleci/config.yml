@@ -1,18 +1,10 @@
 version: 2.1
-name: 'oci-ci-cd'
 
-on:
-  push:
-    branches:
-      - master
-    paths:
-      - kube/**
-  workflow_dispatch: 
+machine: true
 
 jobs:
   build:
-    name: 'Generate Stack Package'
-    runs-on: ubuntu-latest
+    executor: my-ubuntu-exec
     steps:
       - checkout
       - setup_remote_docker
@@ -61,15 +53,24 @@ jobs:
           name: Available platforms
           run: echo ${{ steps.buildx.outputs.platforms }}
       - run:
-          name: 'Build'
+          name: Build
           command: |
             docker build --push --platform linux/amd64,linux/arm64 -t ${{ DOCKER_URL }}/${{ DOCKER_OBJECT_STORAGE_NAMESPACE }}/kubernetes-sample-app:latest kube/.
       - run:
-          name: 'Deploy to Kubernetes Sample App'
+          name: Deploy to Kubernetes Sample App
           command: |
             sed -i 's/<DOCKER_OBJECT_STORAGE_NAMESPACE>/${{ DOCKER_OBJECT_STORAGE_NAMESPACE }}/g' kube/sample-deployment.yaml
             kubectl -n default apply -f kube/sample-deployment.yaml
       - run:
-          name: 'Restart kubernetes sample app'
+          name: Restart kubernetes sample app
           command: |
             kubectl -n default rollout restart deployment kubernetes-sample-app
+
+workflows:
+  version: 2
+  build-master:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
